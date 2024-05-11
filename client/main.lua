@@ -12,7 +12,7 @@ local speed = 0
 for k, v in pairs(Config.GreenZones) do
     greenZone = lib.points.new(v.coords, v.radius)
     function greenZone:onEnter()
-        if v.disablePlayerVehicleCollision then
+        if v.enableVehCollisionFX and v.disablePlayerVehicleCollision then
             for _, player in pairs(GetActivePlayers()) do
                 if player ~= cache.ped then
                     local ped = cache.ped
@@ -47,8 +47,9 @@ for k, v in pairs(Config.GreenZones) do
             lib.showTextUI(v.textToDisplay, {
                 position = v.displayTextPosition,
                 icon = v.displayTextIcon,
+                iconAnimation = 'fade',
                 style = {
-                    borderRadius = 4,
+                    borderRadius = 50,
                     backgroundColor = v.backgroundColorTextUI,
                     color = v.textColor
                 }
@@ -60,9 +61,9 @@ for k, v in pairs(Config.GreenZones) do
                 description = Notifications.greenzoneEnter,
                 type = 'success',
                 position = Notifications.position,
-                duration = 6000,
+                duration = 10000,
                 style = {
-                backgroundColor = '#ff5a47',
+                backgroundColor = '#FA5252',
                 color = '#2C2C2C',
                     ['.description'] = {
                         color = '#2C2C2C',
@@ -74,7 +75,7 @@ for k, v in pairs(Config.GreenZones) do
         end
     end
     function greenZone:onExit()
-        if v.disablePlayerVehicleCollision then
+        if v.enableVehCollisionFX and v.disablePlayerVehicleCollision then
             for _, player in pairs(GetActivePlayers()) do
                 if player ~= cache.ped then
                     local ped = cache.ped
@@ -130,14 +131,20 @@ for k, v in pairs(Config.GreenZones) do
                     local ped2 = GetPlayerPed(player)
                     local veh = GetVehiclePedIsIn(ped, false)
                     local veh2 = GetVehiclePedIsIn(ped2, false)
-                    SetEntityAlpha(ped2, 153, false)
+                    if v.enableVehCollisionFX then
+                        SetEntityAlpha(ped2, 153, false)
+                    end
                     if veh2 ~= 0 then
                         if veh ~= 0 then
-                            SetEntityAlpha(veh, 153, false)
+                            if v.enableVehCollisionFX then
+                                SetEntityAlpha(veh, 153, false)
+                            end
                             SetEntityNoCollisionEntity(veh, veh2, true)
                             SetEntityNoCollisionEntity(veh2, veh, true)
                         end
-                        SetEntityAlpha(veh2, 153, false)
+                        if v.enableVehCollisionFX then
+                            SetEntityAlpha(veh2, 153, false)
+                        end
                         SetEntityNoCollisionEntity(ped, veh2, true)
                         SetEntityNoCollisionEntity(veh2, ped, true)
                     else
@@ -188,7 +195,7 @@ for k, v in pairs(Config.GreenZones) do
 end
 
 -- Start of events for creating Greenzones in-game, this is the menu that takes data, passes it to server
-lib.callback.register('lation_greenzones:adminZone', function()
+lib.callback.register('mri_Qsafezone:adminZone', function()
     pedCoords = GetEntityCoords(cache.ped)
     adminZoneMenu = lib.inputDialog('Create Greenzone', {
         {type = 'input', label = 'Blip Name', description = 'The name of the Greenzone on the map', placeholder = 'Greenzone', icon = 'quote-left', required = true, min = 4, max = 16},
@@ -219,13 +226,13 @@ lib.callback.register('lation_greenzones:adminZone', function()
         speedLimit = adminZoneMenu[8]
         blipID = adminZoneMenu[9]
         blipColor = adminZoneMenu[10]
-        lib.callback('lation_greenzones:data', false, cb, pedCoords, zoneName, textUI, textUIColor, textUIPosition, zoneSize, disarm, invincible, speedLimit, blipID, blipColor)
+        lib.callback('mri_Qsafezone:data', false, cb, pedCoords, zoneName, textUI, textUIColor, textUIPosition, zoneSize, disarm, invincible, speedLimit, blipID, blipColor)
     end
 end)
 
 -- The function that creates a temporary greenzone via in-game command for all clients from the data passed
-RegisterNetEvent('lation_greenzones:createAdminZone')
-AddEventHandler('lation_greenzones:createAdminZone', function(zoneCoords, zoneName, textUI, textUIColor, textUIPosition, zoneSize, disarm, invincible, speedLimit, blipID, blipColor)
+RegisterNetEvent('mri_Qsafezone:createAdminZone')
+AddEventHandler('mri_Qsafezone:createAdminZone', function(zoneCoords, zoneName, textUI, textUIColor, textUIPosition, zoneSize, disarm, invincible, speedLimit, blipID, blipColor)
     vehicle = GetVehiclePedIsIn(cache.ped, false)
     zone:remove() -- Removes any existing zones
     RemoveBlip(radiusBlip) -- Removes any exisitng radius blips
@@ -271,7 +278,7 @@ end)
 
 -- The function that creates blips for Greenzones created in-game
 function createBlip(blipName, blipCoords, blipRadius, blipID, blipColor)
-    local radius = ESX.Math.Round(blipRadius, 1)
+    local radius = qbx.math.round(blipRadius, 1)
     radiusBlip = AddBlipForRadius(blipCoords, radius)
     SetBlipColour(radiusBlip, blipColor)
     SetBlipAlpha(radiusBlip, 100)
@@ -298,7 +305,7 @@ function deleteZone()
 end
 
 -- The confirmation for deleting an active temporary greenzone
-lib.callback.register('lation_greenzones:adminZoneClear', function()
+lib.callback.register('mri_Qsafezone:adminZoneClear', function()
     local confirm = lib.alertDialog({
         header = 'Confirm Action',
         content = 'Are you sure you want to delete your Green Zone?',
@@ -306,14 +313,14 @@ lib.callback.register('lation_greenzones:adminZoneClear', function()
         cancel = true
     })
     if confirm == 'confirm' then
-        lib.callback('lation_greenzones:deleteZone')
+        lib.callback('mri_Qsafezone:deleteZone')
     else
         return
     end
 end)
 
 -- The event that gets triggered for all clients when deleting a temporary greenzone
-RegisterNetEvent('lation_greenzones:deleteAdminZone')
-AddEventHandler('lation_greenzones:deleteAdminZone', function()
+RegisterNetEvent('mri_Qsafezone:deleteAdminZone')
+AddEventHandler('mri_Qsafezone:deleteAdminZone', function()
     deleteZone()
 end)
