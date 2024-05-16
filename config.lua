@@ -1,6 +1,6 @@
 Config = {}
 
-Config.EnableNotifications = false -- Do you want notifications when a player enters and exits the preconfigured greenzones (The Config.GreenZones)?
+Config.EnableNotifications = true -- Do you want notifications when a player enters and exits the preconfigured greenzones (The Config.GreenZones)?
 Config.GreenzonesCommand = 'setzone' -- The command to run in-game to start creating a temporary greenzone
 Config.GreenzonesClearCommand = 'clearzone' -- The command to run in-game to clear an existing temporary greenzone
 
@@ -15,7 +15,7 @@ Config.GreenZones = { -- These are persistent greenzones that exist constantly, 
         removeWeapons = false, -- Do you want to remove weapons completely from players hands while in this zone? (true if yes, false if no)
         disableFiring = true, -- Do you want to disable everyone from firing weapons/punching/etc in this zone? (true if yes, false if no)
         setInvincible = true, -- Do you want everyone to be invincible in this zone? (true if yes, false if no)
-        displayTextUI = false, -- Do you want textUI to display on everyones screen while in this zone? (true if yes, false if no)
+        displayTextUI = true, -- Do you want textUI to display on everyones screen while in this zone? (true if yes, false if no)
         textToDisplay = '**Área** Segura', -- The text to display on everyones screen if displayTextUI is true for this zone
         backgroundColorTextUI = '#72E68F', -- The color of the textUI background to display if displayTextUI is true for this zone
         textColor = '#2C2C2C', -- The color of the text & icon itself on the textUI if displayTextUI is true for this zone

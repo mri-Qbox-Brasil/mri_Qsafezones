@@ -63,13 +63,14 @@ for k, v in pairs(Config.GreenZones) do
                 position = Notifications.position,
                 duration = 10000,
                 style = {
-                backgroundColor = '#FA5252',
-                color = '#2C2C2C',
-                    ['.description'] = {
-                        color = '#2C2C2C',
-                    }
+                    backgroundColor = '#FA5252',
+                    color = '#2C2C2C',
+                        ['.description'] = {
+                            color = '#2C2C2C',
+                        }
                 },
                 icon = Notifications.greenzoneIcon,
+                iconAnimate = 'fade',
                 iconColor = '#2C2C2C'
             })
         end
@@ -119,6 +120,7 @@ for k, v in pairs(Config.GreenZones) do
                     }
                 },
                 icon = Notifications.greenzoneIcon,
+                iconAnimate = 'fade',
                 iconColor = '#2C2C2C'
             })
         end
@@ -248,6 +250,7 @@ AddEventHandler('mri_Qsafezone:createAdminZone', function(zoneCoords, zoneName, 
         lib.showTextUI(textUI, {
             position = textUIPosition,
             icon = 'shield-halved',
+            iconAnimate = 'fade',
             style = {
                 borderRadius = 4,
                 backgroundColor = textUIColor,
