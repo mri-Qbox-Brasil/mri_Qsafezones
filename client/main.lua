@@ -10,7 +10,20 @@ local speed = 0
 
 -- Default greenzones configured beforehand in the config
 for k, v in pairs(Config.GreenZones) do
-    greenZone = lib.points.new(v.coords, v.radius)
+    local greenZone
+
+    if v.usePoly then
+        greenZone = lib.zones.poly({
+            points = v.points,
+            thickness = v.thickness or 2.0,
+            debug = Config.DebugPoly,
+            minZ = v.minZ or 0,
+            maxZ = v.maxZ or 100
+        })
+    else
+        greenZone = lib.points.new(v.coords, v.radius)
+    end
+
     function greenZone:onEnter()
         if v.enableVehCollisionFX and v.disablePlayerVehicleCollision then
             for _, player in pairs(GetActivePlayers()) do
@@ -40,8 +53,11 @@ for k, v in pairs(Config.GreenZones) do
             SetEntityInvincible(cache.ped, true)
         end
         if v.enableSpeedLimits then
-            vehicle = GetVehiclePedIsIn(cache.ped, false)
-            speed = v.setSpeedLimit * 0.44
+            local vehicle = GetVehiclePedIsIn(cache.ped, false)
+            local speed = v.setSpeedLimit * 0.44
+            if vehicle ~= 0 then
+                SetVehicleMaxSpeed(vehicle, speed)
+            end
         end
         if v.displayTextUI then
             lib.showTextUI(v.textToDisplay, {
@@ -57,7 +73,7 @@ for k, v in pairs(Config.GreenZones) do
         end
         if Config.EnableNotifications then
             lib.notify({
-                title = Notifications.greenzoneTitle, 
+                title = Notifications.greenzoneTitle,
                 description = Notifications.greenzoneEnter,
                 type = 'success',
                 position = Notifications.position,
@@ -65,9 +81,7 @@ for k, v in pairs(Config.GreenZones) do
                 style = {
                     backgroundColor = '#FA5252',
                     color = '#2C2C2C',
-                        ['.description'] = {
-                            color = '#2C2C2C',
-                        }
+                    ['.description'] = { color = '#2C2C2C' }
                 },
                 icon = Notifications.greenzoneIcon,
                 iconAnimate = 'fade',
@@ -75,6 +89,7 @@ for k, v in pairs(Config.GreenZones) do
             })
         end
     end
+
     function greenZone:onExit()
         if v.enableVehCollisionFX and v.disablePlayerVehicleCollision then
             for _, player in pairs(GetActivePlayers()) do
@@ -100,24 +115,24 @@ for k, v in pairs(Config.GreenZones) do
             SetEntityInvincible(cache.ped, false)
         end
         if v.enableSpeedLimits then
-            vehicle = GetVehiclePedIsIn(cache.ped, false)
-            SetVehicleMaxSpeed(vehicle, 0.0)
+            local vehicle = GetVehiclePedIsIn(cache.ped, false)
+            if vehicle ~= 0 then
+                SetVehicleMaxSpeed(vehicle, 0.0)
+            end
         end
         if v.displayTextUI then
             lib.hideTextUI()
         end
         if Config.EnableNotifications then
             lib.notify({
-                title = Notifications.greenzoneTitle, 
+                title = Notifications.greenzoneTitle,
                 description = Notifications.greenzoneExit,
                 type = 'error',
                 position = Notifications.position,
                 style = {
-                backgroundColor = '#72E68F',
-                color = '#2C2C2C',
-                    ['.description'] = {
-                        color = '#2C2C2C',
-                    }
+                    backgroundColor = '#72E68F',
+                    color = '#2C2C2C',
+                    ['.description'] = { color = '#2C2C2C' }
                 },
                 icon = Notifications.greenzoneIcon,
                 iconAnimate = 'fade',
@@ -125,6 +140,7 @@ for k, v in pairs(Config.GreenZones) do
             })
         end
     end
+
     function greenZone:nearby()
         if v.disablePlayerVehicleCollision then
             for _, player in pairs(GetActivePlayers()) do
@@ -160,8 +176,10 @@ for k, v in pairs(Config.GreenZones) do
             DisablePlayerFiring(cache.ped, true)
         end
         if v.enableSpeedLimits then
-            vehicle = GetVehiclePedIsIn(cache.ped, false) -- This isn't 100% needed, could be commented out if performance is impacted too much. Only difference would be if player spawns into this zone, they can drive at any speed until exit/re-enter
-            SetVehicleMaxSpeed(vehicle, speed)
+            local vehicle = GetVehiclePedIsIn(cache.ped, false)
+            if vehicle ~= 0 then
+                SetVehicleMaxSpeed(vehicle, speed)
+            end
         end
     end
 end

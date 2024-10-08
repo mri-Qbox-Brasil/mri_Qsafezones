@@ -4,12 +4,20 @@ Config.EnableNotifications = true -- Do you want notifications when a player ent
 Config.GreenzonesCommand = 'setzone' -- The command to run in-game to start creating a temporary greenzone
 Config.GreenzonesClearCommand = 'clearzone' -- The command to run in-game to clear an existing temporary greenzone
 
+Config.DebugPoly = false
 Config.GreenZones = { -- These are persistent greenzones that exist constantly, at all times - you can create as many as you want here
     ['hospital'] = {
-        coords = vec3(299.2270, -584.6892, 43.2608), -- The center-most location of the greenzone 
+        usePoly = true,
+        points = {
+            vec3(299.2270, -584.6892, 43.2608),
+            vec3(300.2270, -584.6892, 43.2608),
+            vec3(300.2270, -585.6892, 43.2608),
+            vec3(299.2270, -585.6892, 43.2608)
+        },
+        coords = vec3(299.2270, -584.6892, 43.2608), -- The center-most location of the greenzone
         radius = 100.0, -- The radius (how large or small) the greenzone is (note: this must include the .0 on the end of the number to work)
         disablePlayerVehicleCollision = true, -- Do you want to disable players & their vehicles collisions between each other? (true if yes, false if no)
-        enableVehCollisionFX = false, 
+        enableVehCollisionFX = false,
         enableSpeedLimits = false, -- Do you want to enforce a speed limit in this zone? (true if yes, false if no)
         setSpeedLimit = 30, -- The speed limit (in MPH) that will be enforced in this zone if enableSpeedLimits is true
         removeWeapons = false, -- Do you want to remove weapons completely from players hands while in this zone? (true if yes, false if no)
@@ -31,6 +39,13 @@ Config.GreenZones = { -- These are persistent greenzones that exist constantly, 
         blipName = 'Hospital Greenzone' -- Blip name on the map (if enableSprite = true, otherwise can be ignored)
     },
     -- ['policestation'] = {
+    --     usePoly = false,
+    --     points = {
+    --         vec3(432.7403, -982.1954, 30.7105),
+    --         vec3(431.7403, -982.1954, 30.7105),
+    --         vec3(431.7403, -983.1954, 30.7105),
+    --         vec3(432.7403, -983.1954, 30.7105)
+    --     },
     --     coords = vec3(432.7403, -982.1954, 30.7105),
     --     radius = 100.0,
     --     disablePlayerVehicleCollision = false,
@@ -55,6 +70,13 @@ Config.GreenZones = { -- These are persistent greenzones that exist constantly, 
     --     blipName = 'LSPD Greenzone'
     -- },
     -- ['examplelocation3'] = {
+    --     usePoly = false,
+    --     points = {
+    --         vec3(-1243.6606, 1348.0383, 212.7915),
+    --         vec3(-1244.6606, 1348.0383, 212.7915),
+    --         vec3(-1244.6606, 1347.0383, 212.7915),
+    --         vec3(-1243.6606, 1347.0383, 212.7915)
+    --     },
     --     coords = vec3(-1243.6606, 1348.0383, 212.7915),
     --     radius = 200.0,
     --     disablePlayerVehicleCollision = false,
