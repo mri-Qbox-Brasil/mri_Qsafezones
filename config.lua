@@ -102,6 +102,7 @@ Config.GreenZones = { -- These are persistent greenzones that exist constantly, 
     -- }
     -- Create more zones here by following the same format as above
 }
+<<<<<<< fork
 
 Notifications = {
     position = 'center-left', -- The position for all notifications
@@ -110,3 +111,14 @@ Notifications = {
     greenzoneEnter = 'Você entrou em uma Safezone e certas ações foram desativadas', -- Description when entering a greenzone
     greenzoneExit = 'Você saiu de uma Safezone e todas as ações foram reativadas novamente', -- Description when exiting a greenzone
 }
+||||||| base
+
+Notifications = {
+    position = 'top', -- The position for all notifications
+    greenzoneTitle = 'Green Zone', -- Title when entering a greenzone
+    greenzoneIcon = 'border-all', -- The icon displayed on the notifications
+    greenzoneEnter = 'You have entered a greenzone and certain actions have been disabled', -- Description when entering a greenzone
+    greenzoneExit = 'You have exited a greenzone and all actions have been restored', -- Description when exiting a greenzone
+}
+=======
+>>>>>>> upstream
